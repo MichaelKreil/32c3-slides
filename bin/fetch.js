@@ -36,7 +36,7 @@ function fetchVideos(videos) {
 				}
 			})
 		},
-		scanVideos
+		stripVideos
 	)
 }
 
