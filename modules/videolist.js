@@ -10,6 +10,9 @@ var me = {
 		if (!list[id]) list[id] = {id:id};
 		return list[id];
 	},
+	getList: function () {
+		return Object.keys(list).map(function (key) { return list[key] });
+	},
 	set: function (id, newObj) {
 		var obj = list[id] || (list[id] = {});
 		Object.keys(newObj).forEach(function (key) {
