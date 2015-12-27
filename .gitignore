@@ -3,3 +3,6 @@ node_modules/
 
 videos.json
 *.mp4
+*.raw
+
+*.sh
