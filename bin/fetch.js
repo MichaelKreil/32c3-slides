@@ -12,11 +12,11 @@ network.getJSON('https://streaming.media.ccc.de/configs/conferences/32c3/vod.jso
 		if (entry.status != 'recorded') return;
 
 		var video = videolist.get(entry.id);
-		video.filename = path.resolve(config.videoFolder, entry.id+'.mp4');
+		video.filename = path.join(config.videoFolder, entry.id+'.mp4');
 		video.url = 'http:'+entry.mp4;
 		videolist.set(video.id, video);
 
-		if (fs.existsSync(video.filename) && video.downloaded) return;
+		if (fs.existsSync(path.resolve(config.mainFolder, video.filename)) && video.downloaded) return;
 		todos.push(video);
 	})
 	fetchVideos(todos);
@@ -27,7 +27,7 @@ function fetchVideos(videos) {
 		videos,
 		1,
 		function (video, callback) {
-			network.downloadFile(video.url, video.filename, function (finished, progress) {
+			network.downloadFile(video, function (finished, progress) {
 				if (finished) {
 					videolist.set(video.id, {downloaded:true});
 					callback();

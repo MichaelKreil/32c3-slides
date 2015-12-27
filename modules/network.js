@@ -1,7 +1,9 @@
 var fs = require('fs');
 var URL = require('url');
+var path = require('path');
 var http = require('http');
 var https = require('https');
+var config = require('../config.js');
 
 function getJSON(url, cb) {
 	var req = getRequest(url);
@@ -13,7 +15,9 @@ function getJSON(url, cb) {
 	});
 }
 
-function downloadFile(url, filename, cb) {
+function downloadFile(video, cb) {
+	var url = video.url;
+	var filename = path.resolve(config.mainFolder, video.filename);
 	console.log('Trying to download "'+url+'"');
 
 	var req = getRequest(url);
