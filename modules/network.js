@@ -55,7 +55,7 @@ function downloadFile(video, cb) {
 		var size = 0;
 
 		var interval = setInterval(function () {
-			cb(false, size/maxSize);
+			console.log('   ' + (100*size/maxSize).toFixed(1) + '%');
 		}, 5000)
 
 		res.on('data', function (chunk) {
@@ -64,7 +64,7 @@ function downloadFile(video, cb) {
 
 		res.on('end', function () {
 			clearInterval(interval);
-			cb(true, 1);
+			cb();
 		})
 
 		res.pipe(fs.createWriteStream(filename));

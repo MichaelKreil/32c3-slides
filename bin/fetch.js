@@ -47,12 +47,9 @@ function getVideos(cb) {
 		async.eachLimit( todos,	1,
 			function (video, callback) {
 				network.downloadFile(video, function (finished, progress) {
-					if (finished) {
-						videolist.set(video.id, {downloaded:true});
-						callback();
-					} else {
-						console.log('   ' + (100*progress).toFixed(1) + '%');
-					}
+					video.downloaded = true;
+					videolist.set(video.id, video);
+					callback();
 				})
 			},	cb
 		)
