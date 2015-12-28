@@ -9,7 +9,8 @@ function generateSession(video, session, cb) {
 	segments = JSON.parse(segments);
 
 	async.parallel([
-		generateJPEGs//,
+		generateJPEGs,
+		generateThumbs
 		//generateZIP,
 		//generatePDF,
 		//generateHTML
@@ -37,6 +38,35 @@ function generateSession(video, session, cb) {
 		im.on('close', function (code, signal) {
 			if (code != 0) return console.log('child process terminated due to receipt of code "'+code+'" and signal "'+signal+'"');
 			video.hasWebJPEGs = true;
+			cb()
+		});
+	}
+
+	function generateThumbs(cb) {
+		if (video.hasWebThumbs) {
+			cb();
+			return;
+		}
+
+		console.log('   generate Thumbs')
+
+		var args = [
+			path.resolve(config.mainFolder, config.pngFolder, video.id)+'/%d.png[0-'+(segments.length-1)+']',
+			'-strip',
+			'-interlace', 'Plane',
+			'-quality', '90%',
+			'-geometry', '128x72+0+0',
+			'-tile', '10x',
+			ensureFolder(path.resolve(config.mainFolder, config.thumbFolder, video.id)+'.jpg')
+		]
+		console.log(args.join(' '));
+		var im = child_process.spawn('montage', args);
+
+		im.stderr.on('data', function (data) { console.log(data.toString())	})
+
+		im.on('close', function (code, signal) {
+			if (code != 0) return console.log('child process terminated due to receipt of code "'+code+'" and signal "'+signal+'"');
+			video.hasWebThumbs = true;
 			cb()
 		});
 	}

@@ -9,6 +9,7 @@ data/segments/*.json
 data/slides/png/*/*.png
 data/slides/jpg/*/*.jpg
 web/slides/*/*.jpg
+web/thumbs/*.jpg
 
 *.sh
 .DS_Store
