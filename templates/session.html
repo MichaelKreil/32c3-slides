@@ -4,22 +4,22 @@
 	<meta charset="utf-8">
 	<title>Slides for "{{title}}"</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="style/main.css">
 	<style type="text/css">
 		.slide {
 			background-image: url({{{thumb_url}}});
-			background-size: 800% auto;
-			background-repeat: no-repeat;
-			width: 128px;
-			height: 72px;
-			float: left;
-			margin: 10px 0 0 10px;
 		}
 	</style>
 </head>
 <body>
-	<h1>{{title}}</h1>
-	{{#slides}}
-		<a href="{{{jpeg}}}"><div class="slide" style="background-position:-{{offset_x}}px -{{offset_y}}px"></div></a>
-	{{/slides}}
+	<div id="content">
+		<h1>{{title}}</h1>
+		<div id="slide-wrapper">
+		{{#slides}}
+			<a href="{{{jpeg}}}"><div class="slide" style="background-position:-{{offset_x}}px -{{offset_y}}px"></div></a>
+		{{/slides}}
+			<div style="clear:both"></div>
+		</div>
+	</div>
 </body>
 </html>

@@ -1,0 +1,50 @@
+
+body {
+	background: #222;
+	color: #ddd;
+	font-family: sans-serif;
+	margin: 10px;
+}
+
+h1 {
+	font-weight: normal;
+}
+
+#content {
+	width: 80%;
+	margin: 0 auto 50px auto;
+}
+
+#timetable {
+	position: relative;
+}
+	.session {
+		position: absolute;
+		background: #444;
+		border: 1px solid #666;
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		font-family: sans-serif;
+		font-size: 12px;
+		padding: 3px;
+		overflow: hidden;
+		color: #000;
+	}
+		.session.active {
+			background: #4A4;
+			border: 1px solid #6f6;
+			color: #000
+		}
+
+#slide-wrapper {
+	margin-bottom: 20px;
+}
+	.slide {
+		background-size: 800% auto;
+		background-repeat: no-repeat;
+		width: 128px;
+		height: 72px;
+		float: left;
+		margin: 10px 0 0 10px;
+	}

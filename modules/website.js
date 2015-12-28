@@ -6,6 +6,7 @@ var config = require(path.resolve(__dirname, '../config.js'));
 var child_process = require('child_process');
 
 var sessionTemplate = fs.readFileSync(path.resolve(config.mainFolder, 'templates/session.html'), 'utf8');
+var indexTemplate = fs.readFileSync(path.resolve(config.mainFolder, 'templates/index.html'), 'utf8');
 
 function generateSession(video, session, cb) {
 	var segments = fs.readFileSync(path.resolve(config.mainFolder, video.segmentFilename));
@@ -93,6 +94,51 @@ function generateSession(video, session, cb) {
 	}
 }
 
+function generateIndex(videos, sessions, cb) {
+	var rooms = {};
+	var days = [[],[],[],[]];
+	var width = 160, zoomHeight = 1/60000;
+
+	videos.forEach(function (video) {
+		var session = sessions[video.id];
+		session.video = video;
+		rooms[session.location.label_en] = true;
+		//if (!days[session.day.label_en] = true;
+		//console.log(sessions[video.id]);
+		//process.exit();
+	})
+
+	rooms = Object.keys(rooms);
+	var temp = rooms.sort();
+	rooms = {};
+	temp.forEach(function (room, index) { rooms[room] = index });
+
+	var sessionList = [];
+	var startTime = (new Date('2015-12-27T08:00:00.000Z')).getTime();
+	Object.keys(sessions).forEach(function (key) {
+		session = sessions[key];
+		session.room = session.location.label_en;
+		if (rooms[session.room] === undefined) return;
+
+		session.begin  = (new Date(session.begin)).getTime()-startTime;
+		session.end    = (new Date(session.end  )).getTime()-startTime;
+		session.left   = rooms[session.room]*width;
+		session.top    = zoomHeight*(session.begin);
+		session.height = zoomHeight*(session.end-session.begin)-1;
+		session.width  = width-10;
+		session.active = (session.video != undefined);
+
+		var day = parseInt(session.day.id.split('-').pop(), 10);
+		//days[day].push(session);
+		sessionList.push(session);
+	})
+
+	var data = { sessions:sessionList };
+	var html = mustache.render(indexTemplate, data);
+	fs.writeFileSync(path.resolve(config.mainFolder, config.webFolder)+'/index.html', html, 'utf8');
+	cb();
+}
+
 function ensureFolder(file) {
 	var folder = path.dirname(file);
 	if (!fs.existsSync(folder)) {
@@ -103,6 +149,7 @@ function ensureFolder(file) {
 }
 
 module.exports = {
-	generateSession: generateSession
+	generateSession: generateSession,
+	generateIndex: generateIndex
 }
 

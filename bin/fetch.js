@@ -31,6 +31,7 @@ function getSessions(cb) {
 			if (!id) return;
 			id = id[1];
 			sessions[id] = entry;
+			entry.id = id;
 		})
 		cb();
 	})
@@ -135,7 +136,13 @@ function generateWebsite(callback) {
 				}
 			);
 		},
-		callback
+		function () {
+			website.generateIndex(
+				videolist.getList().filter(function (v) { return v.segmented && v.extracted }),
+				sessions,
+				callback
+			)
+		}
 	)
 }
 

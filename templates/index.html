@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Slides</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body>
+	<div id="content">
+		<h1>Slides</h1>
+		<div id="timetable">
+			{{#sessions}}
+				{{#active}}<a href="{{id}}.html">{{/active}}
+					<div class="session {{#active}}active{{/active}}" style="top:{{top}}px;left:{{left}}px;width:{{width}}px;height:{{height}}px">{{title}}</div>
+				{{#active}}</a>{{/active}}
+			{{/sessions}}
+		</div>
+	</div>
+</body>
+</html>
