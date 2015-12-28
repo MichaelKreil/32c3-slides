@@ -12,7 +12,8 @@ async.series([
 	getSessions,
 	getVideos,
 	stripVideos,
-	findSlides
+	findSlides,
+	extractSlides
 ], function () {
 	console.log('finished');
 });
@@ -97,6 +98,21 @@ function findSlides(callback) {
 	)
 }
 
+function extractSlides(callback) {
+	console.log('extract slides');
+
+	async.eachLimit(
+		videolist.getList().filter(function (v) { return v.downloaded && v.segmented && !v.extracted }),
+		1,
+		function (video, cb) {
+			console.log('extract slides '+video.id);
+			videoprocess.extractSlides(video, function () {
+				video.extracted = true;
+				videolist.update(video);
+				cb()
+			});
+		},
+		callback
 	)
 }
 

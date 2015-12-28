@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+var async = require('async');
 var config = require('../config.js');
 var child_process = require('child_process');
 
@@ -146,6 +147,42 @@ function segmentStrip(video, cb) {
 	cb()
 }
 
+function extractSlides(video, callback) {
+	var segments = fs.readFileSync(path.resolve(config.mainFolder, video.segmentFilename));
+	segments = JSON.parse(segments);
+	console.log(segments);
+	async.eachLimit(
+		segments,
+		1,
+		function (segment, cb) {
+			var tMid = Math.round((segment.start + segment.end)/2);
+			segment.filename = video.id+'_'+segment.index;
+
+			console.log('extract "'+segment.filename+'"');
+			
+			//ffmpeg -i $video -ss $interval -f image2 -s $size -vframes 1 $image
+			var args = [
+				'-ss', tMid/25,
+				'-i', path.resolve(config.mainFolder, video.filename),
+				'-y',
+				'-vframes', 1,
+				'-f', 'image2',
+				path.resolve(config.mainFolder, config.pngFolder, segment.filename+'.png')
+			]
+			
+			var ffmpeg = child_process.spawn('ffmpeg', args);
+
+			ffmpeg.on('close', function (code, signal) {
+				if (code != 0) return console.log('child process terminated due to receipt of code "'+code+'" and signal "'+signal+'"');
+				cb()
+			});
+		},
+		function () {
+			callback();
+		}
+	)
+}
+
 function sqr(x) {
 	return x*x
 }
@@ -153,5 +190,6 @@ function sqr(x) {
 
 module.exports = {
 	stripVideo: stripVideo,
-	segmentStrip: segmentStrip
+	segmentStrip: segmentStrip,
+	extractSlides: extractSlides
 }
