@@ -62,7 +62,7 @@ function stripVideo(video, cb) {
 function segmentStrip(video, cb) {
 	var windowSize = 3;
 	var n = 2*windowSize+1;
-	var slideThreshold = 0.05;
+	var slideThreshold = 0.03;
 	var dupThreshold = 2.0;
 	var minLength = 50;
 
