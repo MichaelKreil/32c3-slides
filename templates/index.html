@@ -10,13 +10,15 @@
 	<div id="content">
 		<h1>32C3 Slides</h1>
 		<p>Code is on <a href="https://github.com/MichaelKreil/32c3-slides">GitHub</a></p>
-		<div id="timetable">
+		<div id="timetable" style="height:{{maxHeight}}px">
 			{{#sessions}}
 				{{#active}}<a href="{{id}}.html">{{/active}}
 					<div class="session {{#active}}active{{/active}}" style="top:{{top}}px;left:{{left}}px;width:{{width}}px;height:{{height}}px">{{title}}</div>
 				{{#active}}</a>{{/active}}
 			{{/sessions}}
 		</div>
+		<p>test
+		</p>
 	</div>
 </body>
 </html>

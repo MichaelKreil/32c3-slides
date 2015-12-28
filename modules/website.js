@@ -15,8 +15,8 @@ function generateSession(video, session, cb) {
 	async.parallel([
 		generateJPEGs,
 		generateThumbnails,
-		//generateZIP,
-		//generatePDF,
+		generateZIP,
+		generatePDF,
 		generateHTML
 	], cb)
 
@@ -42,6 +42,54 @@ function generateSession(video, session, cb) {
 		im.on('close', function (code, signal) {
 			if (code != 0) return console.log('child process terminated due to receipt of code "'+code+'" and signal "'+signal+'"');
 			video.hasWebJPEGs = true;
+			cb()
+		});
+	}
+
+	function generateZIP(cb) {
+		if (video.hasWebZIP) {
+			cb();
+			return;
+		}
+
+		console.log('   generate ZIP')
+
+		var args = [
+			'-r',
+			path.resolve(config.mainFolder, config.jpgFolder, video.id)+'.zip',
+			path.resolve(config.mainFolder, config.jpgFolder, video.id)
+		]
+		var zip = child_process.spawn('zip', args);
+
+		zip.stderr.on('data', function (data) { console.log(data.toString())	})
+
+		zip.on('close', function (code, signal) {
+			if (code != 0) return console.log('child process terminated due to receipt of code "'+code+'" and signal "'+signal+'"');
+			video.hasWebZIP = true;
+			cb()
+		});
+	}
+
+	function generatePDF(cb) {
+		if (video.hasWebPDF) {
+			cb();
+			return;
+		}
+
+		console.log('   generate PDF')
+
+		var args = [
+			path.resolve(config.mainFolder, config.jpgFolder, video.id)+'/%d.jpg[0-'+(segments.length-1)+']',
+			'-strip',
+			path.resolve(config.mainFolder, config.jpgFolder, video.id)+'.pdf'
+		]
+		var im = child_process.spawn('convert', args);
+
+		im.stderr.on('data', function (data) { console.log(data.toString())	})
+
+		im.on('close', function (code, signal) {
+			if (code != 0) return console.log('child process terminated due to receipt of code "'+code+'" and signal "'+signal+'"');
+			video.hasWebPDF = true;
 			cb()
 		});
 	}
@@ -80,6 +128,7 @@ function generateSession(video, session, cb) {
 		var data = {
 			title:session.title,
 			thumb_url:'thumbs/'+video.id+'.jpg',
+			id:video.id,
 			slides:segments.map(function (segment) {
 				return {
 					jpeg: 'slides/'+video.id+'/'+segment.index+'.jpg',
@@ -112,6 +161,7 @@ function generateIndex(videos, sessions, cb) {
 
 	var sessionList = [];
 	var startTime = (new Date('2015-12-27T08:00:00.000Z')).getTime();
+	var maxHeight = 0;
 	Object.keys(sessions).forEach(function (key) {
 		session = sessions[key];
 		session.room = session.location.label_en;
@@ -127,9 +177,11 @@ function generateIndex(videos, sessions, cb) {
 
 		var day = parseInt(session.day.id.split('-').pop(), 10);
 		sessionList.push(session);
+
+		if (maxHeight < session.top+session.height) maxHeight = session.top+session.height;
 	})
 
-	var data = { sessions:sessionList };
+	var data = { sessions:sessionList, maxHeight:maxHeight };
 	var html = mustache.render(indexTemplate, data);
 	fs.writeFileSync(path.resolve(config.mainFolder, config.webFolder)+'/index.html', html, 'utf8');
 	cb();
