@@ -22,6 +22,11 @@ a {
 #timetable {
 	position: relative;
 }
+	.day {
+		position: absolute;
+		text-align: center;
+	}
+
 	.session {
 		position: absolute;
 		background: #444;

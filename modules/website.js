@@ -149,7 +149,6 @@ function generateSession(video, session, cb) {
 
 function generateIndex(videos, sessions, cb) {
 	var rooms = {};
-	var days = [[],[],[],[]];
 	var width = 160, zoomHeight = 1/60000;
 
 	videos.forEach(function (video) {
@@ -164,7 +163,7 @@ function generateIndex(videos, sessions, cb) {
 	temp.forEach(function (room, index) { rooms[room] = index });
 
 	var sessionList = [];
-	var startTime = (new Date('2015-12-27T08:00:00.000Z')).getTime();
+	var startTime = (new Date('2015-12-27T04:00:00.000Z')).getTime();
 	var maxHeight = 0;
 	Object.keys(sessions).forEach(function (key) {
 		session = sessions[key];
@@ -185,7 +184,16 @@ function generateIndex(videos, sessions, cb) {
 		if (maxHeight < session.top+session.height) maxHeight = session.top+session.height;
 	})
 
-	var data = { sessions:sessionList, maxHeight:maxHeight };
+	var days = [];
+	for (var i = 0; i < 4; i++) {
+		days.push({
+			top: zoomHeight*((new Date('2015-12-'+(27+i)+'T06:00:00.000Z')).getTime() - startTime),
+			width: width*Object.keys(rooms).length,
+			text: 'Day '+(i+1)
+		})
+	}
+
+	var data = { sessions:sessionList, maxHeight:maxHeight, days:days };
 	var html = mustache.render(indexTemplate, data);
 	fs.writeFileSync(path.resolve(config.mainFolder, config.webFolder)+'/index.html', html, 'utf8');
 	cb();

@@ -137,6 +137,7 @@ function generateWebsite(callback) {
 			);
 		},
 		function () {
+			console.log('generate index page');
 			website.generateIndex(
 				videolist.getList().filter(function (v) { return v.segmented && v.extracted }),
 				sessions,
