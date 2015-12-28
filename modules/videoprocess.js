@@ -22,6 +22,7 @@ function stripVideo(video, cb) {
 	var ffmpeg = child_process.spawn('ffmpeg', args);
 
 	var duration = 3600;
+	var progress = 0;
 	//Duration: 00:50:41.85 
 	//not to do network security.
   //Duration: 00:50:41.85, start: 0.042667, bitrate: 1064 kb/s
@@ -34,16 +35,22 @@ function stripVideo(video, cb) {
 		var m = data.match(/Duration: (\d+):(\d+):(\d+.\d+)/);
 		if (m) {
 			duration = parseFloat(m[1])*3600 + parseFloat(m[2])*360 + parseFloat(m[3]);
+			console.log('duration', duration);
 		}
 		var m = data.match(/time=(\d+):(\d+):(\d+.\d+)/);
 		if (m) {
-			var progress = parseFloat(m[1])*3600 + parseFloat(m[2])*360 + parseFloat(m[3]);
+			progress = parseFloat(m[1])*3600 + parseFloat(m[2])*360 + parseFloat(m[3]);
+			console.log('progress', progress);
 			progress = 100*progress/duration;
-			console.log(progress.toFixed(2)+' %')
 		}
 	});
 
+	var interval = setInterval(function () {
+		console.log('   ' + progress.toFixed(1) + '%');
+	}, 5000)
+
 	ffmpeg.on('close', function (code, signal) {
+		clearInterval(interval);
 		if (code != 0) return console.log('child process terminated due to receipt of code "'+code+'" and signal "'+signal+'"');
 		video.stripped = true;
 		cb()
