@@ -34,13 +34,11 @@ function stripVideo(video, cb) {
 		data = data.toString();
 		var m = data.match(/Duration: (\d+):(\d+):(\d+.\d+)/);
 		if (m) {
-			duration = parseFloat(m[1])*3600 + parseFloat(m[2])*360 + parseFloat(m[3]);
-			console.log('duration', duration);
+			duration = parseFloat(m[1])*3600 + parseFloat(m[2])*60 + parseFloat(m[3]);
 		}
 		var m = data.match(/time=(\d+):(\d+):(\d+.\d+)/);
 		if (m) {
-			progress = parseFloat(m[1])*3600 + parseFloat(m[2])*360 + parseFloat(m[3]);
-			console.log('progress', progress);
+			progress = parseFloat(m[1])*3600 + parseFloat(m[2])*60 + parseFloat(m[3]);
 			progress = 100*progress/duration;
 		}
 	});
