@@ -8,46 +8,55 @@ var videoprocess = require(path.resolve(__dirname, '../modules/videoprocess.js')
 
 var sessions = {};
 
-network.getJSON('http://data.conference.bits.io/data/32c3/sessions.json', function (entries) {
-	entries.forEach(function (entry) {
-		var id = entry.id.match(/^32c3-([0-9]{4})$/);
-		if (!id) return;
-		id = id[1];
-		sessions[id] = entry;
+async.series([
+	getSessions,
+	getVideos,
+	stripVideos
+], function () {
+	console.log('finished');
+});
+
+
+
+function getSessions(cb) {
+	network.getJSON('http://data.conference.bits.io/data/32c3/sessions.json', function (entries) {
+		entries.forEach(function (entry) {
+			var id = entry.id.match(/^32c3-([0-9]{4})$/);
+			if (!id) return;
+			id = id[1];
+			sessions[id] = entry;
+		})
+		cb();
 	})
-	console.dir(sessions, {colors:true});
-})
+}
 
-network.getHTMLLinks('http://berlin.ftp.media.ccc.de/congress/32C3/h264-hd/', function (entries) {
-	var todos = [];
-	entries.forEach(function (entry) {
-		var video = videolist.get(entry.id);
-		video.filename = path.join(config.videoFolder, entry.id+'.mp4');
-		video.url = entry.url;
-		videolist.set(video.id, video);
+function getVideos(cb) {
+	network.getHTMLLinks('http://berlin.ftp.media.ccc.de/congress/32C3/h264-hd/', function (entries) {
+		var todos = [];
 
-		if (fs.existsSync(path.resolve(config.mainFolder, video.filename)) && video.downloaded) return;
-		todos.push(video);
+		entries.forEach(function (entry) {
+			var video = videolist.get(entry.id);
+			video.filename = path.join(config.videoFolder, entry.id+'.mp4');
+			video.url = entry.url;
+			videolist.set(video.id, video);
+
+			if (fs.existsSync(path.resolve(config.mainFolder, video.filename)) && video.downloaded) return;
+			todos.push(video);
+		})
+		
+		async.eachLimit( todos,	1,
+			function (video, callback) {
+				network.downloadFile(video, function (finished, progress) {
+					if (finished) {
+						videolist.set(video.id, {downloaded:true});
+						callback();
+					} else {
+						console.log('   ' + (100*progress).toFixed(1) + '%');
+					}
+				})
+			},	cb
+		)
 	})
-	fetchVideos(todos);
-})
-
-function fetchVideos(videos) {
-	async.eachLimit(
-		videos,
-		1,
-		function (video, callback) {
-			network.downloadFile(video, function (finished, progress) {
-				if (finished) {
-					videolist.set(video.id, {downloaded:true});
-					callback();
-				} else {
-					console.log('   ' + (100*progress).toFixed(1) + '%');
-				}
-			})
-		},
-		stripVideos
-	)
 }
 
 function stripVideos() {
