@@ -24,8 +24,9 @@ function getHTMLLinks(baseUrl, cb) {
 			data = data.match(/href=\".*?\"/g);
 			data = data.map(function (entry) {
 				var url = entry.match(/href=\"(.*?)\"/)[1];
-				if (url[0] == '.') return false;
-				var id = url.match(/^32c3-([0-9]{4})-/)[1];
+				var id = url.match(/^32c3-([0-9]{4})-/);
+				if (!id) return false;
+				id = id[1];
 				return {
 					url: URL.resolve(baseUrl, url),
 					id: id
