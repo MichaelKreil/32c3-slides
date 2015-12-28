@@ -65,7 +65,11 @@ function stripVideos() {
 		1,
 		function (video, cb) {
 			console.log('strip '+video.id);
-			videoprocess.stripVideo(video, cb);
+			videoprocess.stripVideo(video, function () {
+				video.stripped = true;
+				videolist.set(video.id, video);
+				cb()
+			});
 		}
 	)
 }
