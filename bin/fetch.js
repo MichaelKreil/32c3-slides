@@ -38,7 +38,7 @@ function getVideos(cb) {
 			var video = videolist.get(entry.id);
 			video.filename = path.join(config.videoFolder, entry.id+'.mp4');
 			video.url = entry.url;
-			videolist.set(video.id, video);
+			videolist.update(video);
 
 			if (fs.existsSync(path.resolve(config.mainFolder, video.filename)) && video.downloaded) return;
 			todos.push(video);
@@ -48,7 +48,7 @@ function getVideos(cb) {
 			function (video, callback) {
 				network.downloadFile(video, function (finished, progress) {
 					video.downloaded = true;
-					videolist.set(video.id, video);
+					videolist.update(video);
 					callback();
 				})
 			},	cb
@@ -64,7 +64,7 @@ function stripVideos() {
 			console.log('strip '+video.id);
 			videoprocess.stripVideo(video, function () {
 				video.stripped = true;
-				videolist.set(video.id, video);
+				videolist.update(video);
 				cb()
 			});
 		}

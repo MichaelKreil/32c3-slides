@@ -21,6 +21,9 @@ var me = {
 
 		me.save();
 	},
+	update: function (obj) {
+		me.set(obj.id, obj);
+	},
 	save: function () {
 		fs.writeFileSync(config.statusFile, JSON.stringify(list, null, '\t'), 'utf8');
 	}
