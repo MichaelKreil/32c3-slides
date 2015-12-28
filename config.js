@@ -8,5 +8,6 @@ module.exports = {
 	segmentFolder: 'data/segments',
 	pngFolder:     'data/slides/png',
 	jpgFolder:     'web/slides/',
-	thumbFolder:   'web/thumbs/'
+	thumbFolder:   'web/thumbs/',
+	webFolder:     'web/'
 }

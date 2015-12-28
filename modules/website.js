@@ -1,8 +1,11 @@
 var fs = require('fs');
 var path = require('path');
 var async = require('async');
+var mustache = require('mustache');
 var config = require(path.resolve(__dirname, '../config.js'));
 var child_process = require('child_process');
+
+var sessionTemplate = fs.readFileSync(path.resolve(config.mainFolder, 'templates/session.html'), 'utf8');
 
 function generateSession(video, session, cb) {
 	var segments = fs.readFileSync(path.resolve(config.mainFolder, video.segmentFilename));
@@ -10,10 +13,10 @@ function generateSession(video, session, cb) {
 
 	async.parallel([
 		generateJPEGs,
-		generateThumbs
+		generateThumbnails,
 		//generateZIP,
 		//generatePDF,
-		//generateHTML
+		generateHTML
 	], cb)
 
 	function generateJPEGs(cb) {
@@ -42,7 +45,7 @@ function generateSession(video, session, cb) {
 		});
 	}
 
-	function generateThumbs(cb) {
+	function generateThumbnails(cb) {
 		if (video.hasWebThumbs) {
 			cb();
 			return;
@@ -55,11 +58,10 @@ function generateSession(video, session, cb) {
 			'-strip',
 			'-interlace', 'Plane',
 			'-quality', '90%',
-			'-geometry', '128x72+0+0',
-			'-tile', '10x',
+			'-geometry', '256x144+0+0',
+			'-tile', '8x',
 			ensureFolder(path.resolve(config.mainFolder, config.thumbFolder, video.id)+'.jpg')
 		]
-		console.log(args.join(' '));
 		var im = child_process.spawn('montage', args);
 
 		im.stderr.on('data', function (data) { console.log(data.toString())	})
@@ -69,6 +71,25 @@ function generateSession(video, session, cb) {
 			video.hasWebThumbs = true;
 			cb()
 		});
+	}
+
+	function generateHTML(cb) {
+		console.log('   generate HTML');
+
+		var data = {
+			title:session.title,
+			thumb_url:'thumbs/'+video.id+'.jpg',
+			slides:segments.map(function (segment) {
+				return {
+					jpeg: 'slides/'+video.id+'/'+segment.index+'.jpg',
+					offset_x: (segment.index % 10)*128,
+					offset_y: Math.floor(segment.index/ 10)*72
+				}
+			})
+		}
+		var html = mustache.render(sessionTemplate, data);
+		fs.writeFileSync(path.resolve(config.mainFolder, config.webFolder)+'/'+video.id+'.html', html, 'utf8');
+		cb();
 	}
 }
 

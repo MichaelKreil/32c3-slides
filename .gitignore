@@ -10,6 +10,7 @@ data/slides/png/*/*.png
 data/slides/jpg/*/*.jpg
 web/slides/*/*.jpg
 web/thumbs/*.jpg
+web/*.html
 
 *.sh
 .DS_Store
