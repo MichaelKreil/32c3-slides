@@ -8,6 +8,7 @@ data/strips/*.raw
 data/segments/*.json
 data/slides/png/*/*.png
 data/slides/jpg/*/*.jpg
+web/slides/*/*.jpg
 
 *.sh
 .DS_Store

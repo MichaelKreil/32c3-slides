@@ -150,15 +150,15 @@ function segmentStrip(video, cb) {
 function extractSlides(video, callback) {
 	var segments = fs.readFileSync(path.resolve(config.mainFolder, video.segmentFilename));
 	segments = JSON.parse(segments);
-	
+
 	async.eachLimit(
 		segments,
 		1,
 		function (segment, cb) {
 			var tMid = Math.round((segment.start + segment.end)/2);
-			segment.filename = video.id+'/'+segment.index;
+			var filename = video.id+'/'+segment.index;
 
-			console.log('extract '+segment.filename);
+			console.log('extract '+filename);
 			
 			//ffmpeg -i $video -ss $interval -f image2 -s $size -vframes 1 $image
 			var args = [
@@ -167,7 +167,7 @@ function extractSlides(video, callback) {
 				'-y',
 				'-vframes', 1,
 				'-f', 'image2',
-				ensureFolder(path.resolve(config.mainFolder, config.pngFolder, segment.filename+'.png'))
+				ensureFolder(path.resolve(config.mainFolder, config.pngFolder, filename+'.png'))
 			]
 			
 			var ffmpeg = child_process.spawn('ffmpeg', args);

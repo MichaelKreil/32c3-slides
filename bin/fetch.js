@@ -2,8 +2,9 @@ var fs = require('fs');
 var path = require('path');
 var async = require('async');
 var config = require(path.resolve(__dirname, '../config.js'));
-var videolist = require(path.resolve(__dirname, '../modules/videolist.js'));
 var network = require(path.resolve(__dirname, '../modules/network.js'));
+var website = require(path.resolve(__dirname, '../modules/website.js'));
+var videolist = require(path.resolve(__dirname, '../modules/videolist.js'));
 var videoprocess = require(path.resolve(__dirname, '../modules/videoprocess.js'));
 
 var sessions = {};
@@ -13,7 +14,8 @@ async.series([
 	getVideos,
 	stripVideos,
 	findSlides,
-	extractSlides
+	extractSlides,
+	generateWebsite
 ], function () {
 	console.log('finished');
 });
@@ -111,6 +113,27 @@ function extractSlides(callback) {
 				videolist.update(video);
 				cb()
 			});
+		},
+		callback
+	)
+}
+
+function generateWebsite(callback) {
+	console.log('generate website');
+
+	async.eachLimit(
+		videolist.getList().filter(function (v) { return v.segmented && v.extracted }),
+		1,
+		function (video, cb) {
+			console.log('generate website '+video.id);
+			website.generateSession(
+				video,
+				sessions[video.id],
+				function () { 
+					videolist.update(video);
+					cb()
+				}
+			);
 		},
 		callback
 	)

@@ -7,5 +7,5 @@ module.exports = {
 	stripFolder:   'data/strips',
 	segmentFolder: 'data/segments',
 	pngFolder:     'data/slides/png',
-	jpgFolder:     'data/slides/jpg'
+	jpgFolder:     'web/slides/'
 }
