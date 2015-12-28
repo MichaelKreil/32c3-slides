@@ -11,7 +11,7 @@ var sessions = {};
 
 async.series([
 	getSessions,
-	//getVideos,
+	getVideos,
 	stripVideos,
 	findSlides,
 	extractSlides,

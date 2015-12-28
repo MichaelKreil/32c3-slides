@@ -103,9 +103,6 @@ function generateIndex(videos, sessions, cb) {
 		var session = sessions[video.id];
 		session.video = video;
 		rooms[session.location.label_en] = true;
-		//if (!days[session.day.label_en] = true;
-		//console.log(sessions[video.id]);
-		//process.exit();
 	})
 
 	rooms = Object.keys(rooms);
@@ -129,7 +126,6 @@ function generateIndex(videos, sessions, cb) {
 		session.active = (session.video != undefined);
 
 		var day = parseInt(session.day.id.split('-').pop(), 10);
-		//days[day].push(session);
 		sessionList.push(session);
 	})
 
