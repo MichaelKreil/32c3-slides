@@ -150,15 +150,15 @@ function segmentStrip(video, cb) {
 function extractSlides(video, callback) {
 	var segments = fs.readFileSync(path.resolve(config.mainFolder, video.segmentFilename));
 	segments = JSON.parse(segments);
-	console.log(segments);
+	
 	async.eachLimit(
 		segments,
 		1,
 		function (segment, cb) {
 			var tMid = Math.round((segment.start + segment.end)/2);
-			segment.filename = video.id+'_'+segment.index;
+			segment.filename = video.id+'/'+segment.index;
 
-			console.log('extract "'+segment.filename+'"');
+			console.log('extract '+segment.filename);
 			
 			//ffmpeg -i $video -ss $interval -f image2 -s $size -vframes 1 $image
 			var args = [
@@ -167,7 +167,7 @@ function extractSlides(video, callback) {
 				'-y',
 				'-vframes', 1,
 				'-f', 'image2',
-				path.resolve(config.mainFolder, config.pngFolder, segment.filename+'.png')
+				ensureFolder(path.resolve(config.mainFolder, config.pngFolder, segment.filename+'.png'))
 			]
 			
 			var ffmpeg = child_process.spawn('ffmpeg', args);
@@ -185,6 +185,15 @@ function extractSlides(video, callback) {
 
 function sqr(x) {
 	return x*x
+}
+
+function ensureFolder(file) {
+	var folder = path.dirname(file);
+	if (!fs.existsSync(folder)) {
+		ensureFolder(folder);
+		fs.mkdirSync(folder);
+	}
+	return file;
 }
 
 

@@ -6,8 +6,8 @@ videos.json
 data/videos/*.mp4
 data/strips/*.raw
 data/segments/*.json
-data/slides/png/*.png
-data/slides/jpg/*.jpg
+data/slides/png/*/*.png
+data/slides/jpg/*/*.jpg
 
 *.sh
 .DS_Store
