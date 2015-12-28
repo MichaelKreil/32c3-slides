@@ -12,7 +12,7 @@ function generateSession(video, session, cb) {
 	var segments = fs.readFileSync(path.resolve(config.mainFolder, video.segmentFilename));
 	segments = JSON.parse(segments);
 
-	async.parallel([
+	async.series([
 		generateJPEGs,
 		generateThumbnails,
 		generateZIP,
@@ -61,9 +61,10 @@ function generateSession(video, session, cb) {
 		]
 		var zip = child_process.spawn('zip', args);
 
-		zip.stderr.on('data', function (data) { console.log(data.toString())	})
+		//zip.stdout.on('data', function (data) { console.log(data.toString())	})
 
 		zip.on('close', function (code, signal) {
+			//console.log('ping', code, signal);
 			if (code != 0) return console.log('child process terminated due to receipt of code "'+code+'" and signal "'+signal+'"');
 			video.hasWebZIP = true;
 			cb()
