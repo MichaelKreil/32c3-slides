@@ -15,6 +15,29 @@ function getJSON(url, cb) {
 	});
 }
 
+function getHTMLLinks(baseUrl, cb) {
+	var req = getRequest(baseUrl);
+	req.on('response', function (res) {
+		var data = '';
+		res.on('data', function(chunk) { data += chunk; });
+		res.on('end', function() {
+			data = data.match(/href=\".*?\"/g);
+			data = data.map(function (entry) {
+				var url = entry.match(/href=\"(.*?)\"/)[1];
+				if (url[0] == '.') return false;
+				var id = url.match(/^32c3-([0-9]{4})-/)[1];
+				return {
+					url: URL.resolve(baseUrl, url),
+					id: id
+				}
+			})
+			data = data.filter(function (entry) { return entry });
+			cb(data);
+		})
+		res.on('error', function(e) { console.error('Got error: ' + e.message); });
+	});
+}
+
 function downloadFile(video, cb) {
 	var url = video.url;
 	var filename = path.resolve(config.mainFolder, video.filename);
@@ -71,5 +94,6 @@ function getRequest(url) {
 
 module.exports = {
 	getJSON: getJSON,
+	getHTMLLinks: getHTMLLinks,
 	downloadFile: downloadFile
 }

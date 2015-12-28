@@ -6,14 +6,12 @@ var videolist = require(path.resolve(__dirname, '../modules/videolist.js'));
 var network = require(path.resolve(__dirname, '../modules/network.js'));
 var videoprocess = require(path.resolve(__dirname, '../modules/videoprocess.js'));
 
-network.getJSON('https://streaming.media.ccc.de/configs/conferences/32c3/vod.json', function (entries) {
+network.getHTMLLinks('http://berlin.ftp.media.ccc.de/congress/32C3/h264-hd/', function (entries) {
 	var todos = [];
 	entries.forEach(function (entry) {
-		if (entry.status != 'recorded') return;
-
 		var video = videolist.get(entry.id);
 		video.filename = path.join(config.videoFolder, entry.id+'.mp4');
-		video.url = 'http:'+entry.mp4;
+		video.url = entry.url;
 		videolist.set(video.id, video);
 
 		if (fs.existsSync(path.resolve(config.mainFolder, video.filename)) && video.downloaded) return;
