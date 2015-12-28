@@ -20,6 +20,8 @@ async.series([
 
 
 function getSessions(cb) {
+	console.log('load session list');
+
 	network.getJSON('http://data.conference.bits.io/data/32c3/sessions.json', function (entries) {
 		entries.forEach(function (entry) {
 			var id = entry.id.match(/^32c3-([0-9]{4})$/);
@@ -32,6 +34,8 @@ function getSessions(cb) {
 }
 
 function getVideos(cb) {
+	console.log('load video list');
+
 	network.getHTMLLinks('http://berlin.ftp.media.ccc.de/congress/32C3/h264-hd/', function (entries) {
 		var todos = [];
 
@@ -57,22 +61,27 @@ function getVideos(cb) {
 	})
 }
 
-function stripVideos() {
+function stripVideos(callback) {
+	console.log('strip videos');
+
 	async.eachLimit(
 		videolist.getList().filter(function (v) { return v.downloaded && !v.stripped }),
 		1,
 		function (video, cb) {
-			console.log('strip '+video.id);
+			console.log('   strip '+video.id);
 			videoprocess.stripVideo(video, function () {
 				video.stripped = true;
 				videolist.update(video);
 				cb()
 			});
-		}
+		},
+		callback
 	)
 }
 
-function findSlides() {
+function findSlides(callback) {
+	console.log('find slides');
+
 	async.eachLimit(
 		videolist.getList().filter(function (v) { return v.downloaded && v.stripped && !v.segmented }),
 		1,
@@ -83,7 +92,11 @@ function findSlides() {
 				videolist.update(video);
 				cb()
 			});
-		}
+		},
+		callback
+	)
+}
+
 	)
 }
 
