@@ -3,7 +3,9 @@ node_modules/
 
 videos.json
 
-*.mp4
-*.raw
+data/videos/*.mp4
+data/strips/*.raw
+data/segments/*.json
+
 *.sh
 .DS_Store

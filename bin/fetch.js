@@ -12,6 +12,7 @@ async.series([
 	getSessions,
 	getVideos,
 	stripVideos
+	findSlides
 ], function () {
 	console.log('finished');
 });
@@ -64,6 +65,21 @@ function stripVideos() {
 			console.log('strip '+video.id);
 			videoprocess.stripVideo(video, function () {
 				video.stripped = true;
+				videolist.update(video);
+				cb()
+			});
+		}
+	)
+}
+
+function findSlides() {
+	async.eachLimit(
+		videolist.getList().filter(function (v) { return v.downloaded && v.stripped && !v.segmented }),
+		1,
+		function (video, cb) {
+			console.log('find slides '+video.id);
+			videoprocess.segmentStrip(video, function () {
+				video.segmented = true;
 				videolist.update(video);
 				cb()
 			});
