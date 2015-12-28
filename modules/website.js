@@ -82,8 +82,8 @@ function generateSession(video, session, cb) {
 			slides:segments.map(function (segment) {
 				return {
 					jpeg: 'slides/'+video.id+'/'+segment.index+'.jpg',
-					offset_x: (segment.index % 10)*128,
-					offset_y: Math.floor(segment.index/ 10)*72
+					offset_x: (segment.index % 8)*128,
+					offset_y: Math.floor(segment.index/ 8)*72
 				}
 			})
 		}
