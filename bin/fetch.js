@@ -6,6 +6,18 @@ var videolist = require(path.resolve(__dirname, '../modules/videolist.js'));
 var network = require(path.resolve(__dirname, '../modules/network.js'));
 var videoprocess = require(path.resolve(__dirname, '../modules/videoprocess.js'));
 
+var sessions = {};
+
+network.getJSON('http://data.conference.bits.io/data/32c3/sessions.json', function (entries) {
+	entries.forEach(function (entry) {
+		var id = entry.id.match(/^32c3-([0-9]{4})$/);
+		if (!id) return;
+		id = id[1];
+		sessions[id] = entry;
+	})
+	console.dir(sessions, {colors:true});
+})
+
 network.getHTMLLinks('http://berlin.ftp.media.ccc.de/congress/32C3/h264-hd/', function (entries) {
 	var todos = [];
 	entries.forEach(function (entry) {
