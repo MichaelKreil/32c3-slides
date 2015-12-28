@@ -28,12 +28,15 @@ function generateSession(video, session, cb) {
 
 		console.log('   generate JPEGs')
 
+		var jpgFolder = path.resolve(config.mainFolder, config.jpgFolder, video.id);
+		if (fs.existsSync(jpgFolder)) fs.unlinkSync(jpgFolder);
+
 		var args = [
 			'-strip',
 			'-interlace', 'Plane',
 			'-quality', '90%',
 			path.resolve(config.mainFolder, config.pngFolder, video.id)+'/%d.png[0-'+(segments.length-1)+']',
-			ensureFolder(path.resolve(config.mainFolder, config.jpgFolder, video.id)+'/%d.jpg')
+			ensureFolder(jpgFolder+'/%d.jpg')
 		]
 		var im = child_process.spawn('convert', args);
 
