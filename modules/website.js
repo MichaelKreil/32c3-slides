@@ -29,7 +29,7 @@ function generateSession(video, session, cb) {
 		console.log('   generate JPEGs')
 
 		var jpgFolder = path.resolve(config.mainFolder, config.jpgFolder, video.id);
-		if (fs.existsSync(jpgFolder)) fs.unlinkSync(jpgFolder);
+		if (fs.existsSync(jpgFolder)) child_process.execSync('rm -r "'+jpgFolder+'"')
 
 		var args = [
 			'-strip',
