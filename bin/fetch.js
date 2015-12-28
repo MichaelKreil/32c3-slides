@@ -58,7 +58,7 @@ function getVideos(cb) {
 
 function stripVideos() {
 	async.eachLimit(
-		videolist.getList().filter(function (v) { return !v.stripped }),
+		videolist.getList().filter(function (v) { return v.downloaded && !v.stripped }),
 		1,
 		function (video, cb) {
 			console.log('strip '+video.id);

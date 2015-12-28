@@ -3,7 +3,7 @@ var path = require('path');
 var config = require('../config.js');
 var child_process = require('child_process');
 
-var width = 16, height = 12;
+var width = 16, height = 9, frameSize = width*height*3;
 
 
 function stripVideo(video, cb) {
@@ -23,13 +23,7 @@ function stripVideo(video, cb) {
 
 	var duration = 3600;
 	var progress = 0;
-	//Duration: 00:50:41.85 
-	//not to do network security.
-  //Duration: 00:50:41.85, start: 0.042667, bitrate: 1064 kb/s
 
-	//console.log(args.join(' '));
-
-	//ffmpeg.stdout.on('data', function (data) { console.log('stdout: ' + data); });
 	ffmpeg.stderr.on('data', function (data) {
 		data = data.toString();
 		var m = data.match(/Duration: (\d+):(\d+):(\d+.\d+)/);
