@@ -17,6 +17,7 @@ function generateSession(video, session, cb) {
 		generateThumbnails,
 		generateZIP,
 		generatePDF,
+		generateJSON,
 		generateHTML
 	], cb)
 
@@ -99,6 +100,24 @@ function generateSession(video, session, cb) {
 			video.hasWebPDF = true;
 			cb()
 		});
+	}
+
+	function generateJSON(cb) {
+		if (video.hasWebJSON) {
+			cb();
+			return;
+		}
+
+		console.log('   generate JSON')
+
+		fs.writeFileSync(
+			path.resolve(config.mainFolder, config.jpgFolder, video.id)+'.json',
+			JSON.stringify(segments, null, '\t'),
+			'utf8'
+		)
+
+		video.hasWebJSON = true;
+		cb();
 	}
 
 	function generateThumbnails(cb) {

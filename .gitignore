@@ -9,6 +9,7 @@ data/segments/*.json
 data/slides/png/*/*.png
 data/slides/jpg/*/*.jpg
 web/slides/*/*.jpg
+web/slides/*.json
 web/slides/*.pdf
 web/slides/*.zip
 web/thumbs/*.jpg
