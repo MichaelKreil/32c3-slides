@@ -14,18 +14,23 @@
 <body>
 	<div id="content">
 		<h1>{{title}}</h1>
-		<p>Download as
-			<ul>
-				<li><a href="slides/{{id}}.pdf">PDF document</a></li>
-				<li><a href="slides/{{id}}.zip">ZIP archive</a></li>
-			</ul>
-		</p>
-		<div id="slide-wrapper">
-		{{#slides}}
-			<a href="{{{jpeg}}}"><div class="slide" style="background-position:-{{offset_x}}px -{{offset_y}}px"></div></a>
-		{{/slides}}
-			<div style="clear:both"></div>
-		</div>
+		{{#noslides}}
+			<p>Wow, this talk seems to have no slides at all!</p>
+		{{/noslides}}
+		{{noslides}}
+			<p>Download as
+				<ul>
+					<li><a href="slides/{{id}}.pdf">PDF document</a></li>
+					<li><a href="slides/{{id}}.zip">ZIP archive</a></li>
+				</ul>
+			</p>
+			<div id="slide-wrapper">
+			{{#slides}}
+				<a href="{{{jpeg}}}"><div class="slide" style="background-position:-{{offset_x}}px -{{offset_y}}px"></div></a>
+			{{/slides}}
+				<div style="clear:both"></div>
+			</div>
+		{{/noslides}}
 	</div>
 </body>
 </html>

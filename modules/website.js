@@ -21,6 +21,7 @@ function generateSession(video, session, cb) {
 	], cb)
 
 	function generateJPEGs(cb) {
+		if (segments.length == 0) video.hasWebJPEGs = true;
 		if (video.hasWebJPEGs) {
 			cb();
 			return;
@@ -50,6 +51,7 @@ function generateSession(video, session, cb) {
 	}
 
 	function generateZIP(cb) {
+		if (segments.length == 0) video.hasWebZIP = true;
 		if (video.hasWebZIP) {
 			cb();
 			return;
@@ -75,6 +77,7 @@ function generateSession(video, session, cb) {
 	}
 
 	function generatePDF(cb) {
+		if (segments.length == 0) video.hasWebPDF = true;
 		if (video.hasWebPDF) {
 			cb();
 			return;
@@ -99,6 +102,7 @@ function generateSession(video, session, cb) {
 	}
 
 	function generateThumbnails(cb) {
+		if (segments.length == 0) video.hasWebThumbs = true;
 		if (video.hasWebThumbs) {
 			cb();
 			return;
@@ -133,6 +137,7 @@ function generateSession(video, session, cb) {
 			title:session.title,
 			thumb_url:'thumbs/'+video.id+'.jpg',
 			id:video.id,
+			noslides: (segments.length == 0),
 			slides:segments.map(function (segment) {
 				return {
 					jpeg: 'slides/'+video.id+'/'+segment.index+'.jpg',
