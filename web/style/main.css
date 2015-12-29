@@ -48,6 +48,11 @@ a {
 			color: #000
 		}
 
+.description {
+	font-size: 14px;
+	color: #aaa;
+}
+
 .download {
 	font-size: 12px;
 	text-align: center;
@@ -84,15 +89,31 @@ a {
 
 #slide-wrapper {
 	margin-bottom: 20px;
-}
+}	
 	.slide {
-		background-size: 800% auto;
-		background-repeat: no-repeat;
+		display: inline-block;
 		width: 128px;
-		height: 72px;
-		float: left;
+		height: 96px;
 		margin: 10px 0 0 10px;
+		font-size: 12px;
+		color: rgba(136,136,136,0);
+		text-align: center;
+		text-decoration: none;
+		        transition: color 0.1s;
+		     -o-transition: color 0.1s;
+		   -moz-transition: color 0.1s;
+		-webkit-transition: color 0.1s;
 	}
+	.slide:hover {
+		color: rgba(136,136,136,255);
+	}
+		.slide div {
+			background-size: 800% auto;
+			background-repeat: no-repeat;
+			width: 128px;
+			height: 72px;
+			margin-bottom: 3px;
+		}
 
 
 

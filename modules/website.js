@@ -154,6 +154,8 @@ function generateSession(video, session, cb) {
 
 		var data = {
 			title:session.title,
+			description:session.description,
+			speakers:session.speakers.map(function (s) { return s.name }).join(', '),
 			thumb_url:'thumbs/'+video.id+'.jpg',
 			id:video.id,
 			noslides: (segments.length == 0),
@@ -161,13 +163,27 @@ function generateSession(video, session, cb) {
 				return {
 					jpeg: 'slides/'+video.id+'/'+segment.index+'.jpg',
 					offset_x: (segment.index % 8)*128,
-					offset_y: Math.floor(segment.index/ 8)*72
+					offset_y: Math.floor(segment.index/ 8)*72,
+					time_start: ft(segment.start),
+					time_end:   ft(segment.end)
 				}
 			})
 		}
 		var html = mustache.render(sessionTemplate, data);
 		fs.writeFileSync(path.resolve(config.mainFolder, config.webFolder)+'/'+video.id+'.html', html, 'utf8');
 		cb();
+
+		function ft(frames) {
+			var t = Math.round(frames/25);
+			var s = t % 60;
+			var m = Math.floor(t / 60) % 60;
+			var h = Math.floor(t / 3600);
+			return [
+				h,
+				(100+m).toFixed(0).substr(1),
+				(100+s).toFixed(0).substr(1)
+			].join(':')
+		}
 	}
 }
 

@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=0.5">
 	<link rel="stylesheet" type="text/css" href="style/main.css">
 	<style type="text/css">
-		.slide {
+		.slide div {
 			background-image: url({{{thumb_url}}});
 		}
 	</style>
@@ -15,6 +15,8 @@
 	<div id="content">
 		<p><a href=".">&lt;- Back to the timetable</a></p>
 		<h1>{{title}}</h1>
+		<p class="description">{{description}}</p>
+		<p class="speakers">{{speakers}}</p>
 		{{#noslides}}
 			<p>Wow, this talk seems to have no slides at all!</p>
 		{{/noslides}}
@@ -28,10 +30,10 @@
 					</tr>
 				</table>
 			</div>
-			<div style="clear:both">
+			<div style="clear:both"></div>
 			<div id="slide-wrapper">
 			{{#slides}}
-				<a href="{{{jpeg}}}"><div class="slide" style="background-position:-{{offset_x}}px -{{offset_y}}px"></div></a>
+				<a href="{{{jpeg}}}" class="slide"><div style="background-position:-{{offset_x}}px -{{offset_y}}px"></div>{{time_start}} - {{time_end}}</a>
 			{{/slides}}
 				<div style="clear:both"></div>
 			</div>
