@@ -19,13 +19,16 @@
 			<p>Wow, this talk seems to have no slides at all!</p>
 		{{/noslides}}
 		{{^noslides}}
-			<p>Download as
-				<ul>
-					<li><a href="slides/{{id}}.pdf">PDF document</a></li>
-					<li><a href="slides/{{id}}.zip">ZIP archive</a></li>
-					<li><a href="slides/{{id}}.json">JSON file</a></li>
-				</ul>
-			</p>
+			<div class="download">Download Slides
+				<table>
+					<tr>
+						<td><a class="pdf"  href="slides/{{id}}.pdf">PDF</a></td>
+						<td><a class="zip"  href="slides/{{id}}.zip">ZIP</a></td>
+						<td><a class="json" href="slides/{{id}}.json">JSON</a></td>
+					</tr>
+				</table>
+			</div>
+			<div style="clear:both">
 			<div id="slide-wrapper">
 			{{#slides}}
 				<a href="{{{jpeg}}}"><div class="slide" style="background-position:-{{offset_x}}px -{{offset_y}}px"></div></a>

@@ -8,6 +8,8 @@ body {
 
 h1 {
 	font-weight: normal;
+	font-size: 30px;
+	margin: 20px 0;
 }
 
 a {
@@ -46,6 +48,40 @@ a {
 			color: #000
 		}
 
+.download {
+	font-size: 12px;
+	text-align: center;
+	float: right;
+	margin-bottom: 0px;
+	width: 130px;
+	margin: 0 0 20px 0;
+}
+	.download table {
+		width: 100%;
+	}
+	.download td {
+		width: 33%;
+		text-align: center;
+	}
+	.download a {
+		display: inline-block;
+		width: 36px;
+		height: 43px;
+		background-size: contain;
+		text-indent: 100%;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+		.download .zip {
+			background-image: url(zip.png)
+		}
+		.download .pdf {
+			background-image: url(pdf.png)
+		}
+		.download .json {
+			background-image: url(json.png)
+		}
+
 #slide-wrapper {
 	margin-bottom: 20px;
 }
@@ -57,3 +93,8 @@ a {
 		float: left;
 		margin: 10px 0 0 10px;
 	}
+
+
+
+
+
