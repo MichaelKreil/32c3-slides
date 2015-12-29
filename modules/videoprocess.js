@@ -49,7 +49,7 @@ function stripVideo(video, cb) {
 
 	var interval = setInterval(function () {
 		console.log('   ' + progress.toFixed(1) + '%');
-	}, 5000)
+	}, 10000)
 
 	ffmpeg.on('close', function (code, signal) {
 		clearInterval(interval);

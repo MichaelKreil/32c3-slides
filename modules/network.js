@@ -57,7 +57,7 @@ function downloadFile(video, cb) {
 
 		var interval = setInterval(function () {
 			console.log('   ' + (100*size/maxSize).toFixed(1) + '%');
-		}, 5000)
+		}, 10000)
 
 		res.on('data', function (chunk) {
 			size += chunk.length;
