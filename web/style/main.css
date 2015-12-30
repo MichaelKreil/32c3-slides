@@ -54,11 +54,14 @@ a {
 		padding: 3px;
 		overflow: hidden;
 		color: #000;
+		border-radius: 5px;
+		line-height: 1.1em;
 	}
 		.session.active {
-			background: #4A4;
+			background: #4b4;
 			border: 1px solid #6f6;
-			color: #000
+			color: #000;
+			box-shadow: 3px 3px 6px rgba(0,0,0,0.2);
 		}
 
 .description {
@@ -89,6 +92,7 @@ a {
 		text-indent: 100%;
 		white-space: nowrap;
 		overflow: hidden;
+		box-shadow: 3px 3px 5px rgba(0,0,0,0.2);
 	}
 		.download .zip {
 			background-image: url(zip.png)
@@ -126,6 +130,7 @@ a {
 			width: 128px;
 			height: 72px;
 			margin-bottom: 3px;
+			box-shadow: 3px 3px 5px rgba(0,0,0,0.2);
 		}
 
 
