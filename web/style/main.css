@@ -4,6 +4,7 @@ body {
 	color: #ddd;
 	font-family: sans-serif;
 	margin: 30px 0;
+	min-width: 920px;
 }
 
 h1 {
