@@ -28,6 +28,10 @@ a {
 		position: absolute;
 		text-align: center;
 	}
+	.room {
+		position: absolute;
+		text-align: center;
+	}
 
 	.session {
 		position: absolute;

@@ -203,7 +203,7 @@ function generateIndex(videos, sessions, cb) {
 	temp.forEach(function (room, index) { rooms[room] = index });
 
 	var sessionList = [];
-	var offsetTop = t2y('2015-12-27T09:00:00.000Z');
+	var offsetTop = t2y('2015-12-27T08:00:00.000Z');
 	var maxHeight = 0;
 	Object.keys(sessions).forEach(function (key) {
 		session = sessions[key];
@@ -225,15 +225,30 @@ function generateIndex(videos, sessions, cb) {
 	})
 
 	var days = [];
+	var roomLabels = [];
 	for (var i = 0; i < 4; i++) {
+		var y = t2y('2015-12-'+(27+i)+'T08:30:00.000Z') - offsetTop;
 		days.push({
-			top: t2y('2015-12-'+(27+i)+'T09:00:00.000Z') - offsetTop,
+			top: y,
 			width: width*Object.keys(rooms).length,
 			text: 'Day '+(i+1)
 		})
+		Object.keys(rooms).forEach(function (room) {
+			roomLabels.push({
+				top: y+40,
+				left: rooms[room]*width,
+				width: width-10,
+				text: room
+			})
+		})
 	}
 
-	var data = { sessions:sessionList, maxHeight:maxHeight, days:days };
+	var data = {
+		sessions:sessionList,
+		maxHeight:maxHeight,
+		days:days,
+		rooms:roomLabels
+	};
 	var html = mustache.render(indexTemplate, data);
 	fs.writeFileSync(path.resolve(config.mainFolder, config.webFolder)+'/index.html', html, 'utf8');
 	cb();
