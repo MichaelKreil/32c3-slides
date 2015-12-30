@@ -24,6 +24,14 @@ a {
 #timetable {
 	position: relative;
 }
+	.timeLabel {
+		position: absolute;
+		text-align: left;
+		border-bottom: 1px solid #666;
+		color: #666;
+		font-size: 12px;
+		margin: 0;
+	}
 	.day {
 		position: absolute;
 		text-align: center;
@@ -109,7 +117,7 @@ a {
 		-webkit-transition: color 0.1s;
 	}
 	.slide:hover {
-		color: rgba(136,136,136,255);
+		color: rgba(136,136,136,1);
 	}
 		.slide div {
 			background-size: 800% auto;

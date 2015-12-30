@@ -190,6 +190,7 @@ function generateSession(video, session, cb) {
 function generateIndex(videos, sessions, cb) {
 	var rooms = {};
 	var width = 160;
+	var offsetLeft = 60;
 
 	videos.forEach(function (video) {
 		var session = sessions[video.id];
@@ -212,7 +213,7 @@ function generateIndex(videos, sessions, cb) {
 
 		session.begin  = t2y(session.begin)-offsetTop;
 		session.end    = t2y(session.end  )-offsetTop;
-		session.left   = rooms[session.room]*width;
+		session.left   = rooms[session.room]*width+offsetLeft;
 		session.top    = session.begin;
 		session.height = session.end-session.begin-1;
 		session.width  = width-10;
@@ -226,19 +227,34 @@ function generateIndex(videos, sessions, cb) {
 
 	var days = [];
 	var roomLabels = [];
+	var timeLabels = [];
 	for (var i = 0; i < 4; i++) {
 		var y = t2y('2015-12-'+(27+i)+'T08:30:00.000Z') - offsetTop;
 		days.push({
 			top: y,
-			width: width*Object.keys(rooms).length,
+			width: width*Object.keys(rooms).length + offsetLeft,
 			text: 'Day '+(i+1)
 		})
 		Object.keys(rooms).forEach(function (room) {
 			roomLabels.push({
 				top: y+40,
-				left: rooms[room]*width,
+				left: rooms[room]*width + offsetLeft,
 				width: width-10,
 				text: room
+			})
+		});
+
+		([10,12,14,16,18,20,22,24]).forEach(function (h) {
+			var d = 27+i;
+			if (h >= 24) {
+				h -= 24;
+				d++;
+			}
+			var y = t2y('2015-12-'+d+'T'+(100+h).toFixed(0).substr(1)+':00:00.000Z') - offsetTop;
+			timeLabels.push({
+				top: y-14,
+				height: 14,
+				text: h+':00'
 			})
 		})
 	}
@@ -247,7 +263,8 @@ function generateIndex(videos, sessions, cb) {
 		sessions:sessionList,
 		maxHeight:maxHeight,
 		days:days,
-		rooms:roomLabels
+		rooms:roomLabels,
+		timeLabels:timeLabels
 	};
 	var html = mustache.render(indexTemplate, data);
 	fs.writeFileSync(path.resolve(config.mainFolder, config.webFolder)+'/index.html', html, 'utf8');
