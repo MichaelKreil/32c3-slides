@@ -232,7 +232,8 @@ function generateIndex(videos, sessions, cb) {
 		var y = t2y('2015-12-'+(27+i)+'T08:30:00.000Z') - offsetTop;
 		days.push({
 			top: y,
-			width: width*Object.keys(rooms).length + offsetLeft,
+			left: offsetLeft,
+			width: width*Object.keys(rooms).length,
 			text: 'Day '+(i+1)
 		})
 		Object.keys(rooms).forEach(function (room) {
