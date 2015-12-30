@@ -189,7 +189,7 @@ function generateSession(video, session, cb) {
 
 function generateIndex(videos, sessions, cb) {
 	var rooms = {};
-	var width = 160, zoomHeight = 1/60000;
+	var width = 160;
 
 	videos.forEach(function (video) {
 		var session = sessions[video.id];
@@ -203,18 +203,18 @@ function generateIndex(videos, sessions, cb) {
 	temp.forEach(function (room, index) { rooms[room] = index });
 
 	var sessionList = [];
-	var startTime = (new Date('2015-12-27T04:00:00.000Z')).getTime();
+	var offsetTop = t2y('2015-12-27T09:00:00.000Z');
 	var maxHeight = 0;
 	Object.keys(sessions).forEach(function (key) {
 		session = sessions[key];
 		session.room = session.location.label_en;
 		if (rooms[session.room] === undefined) return;
 
-		session.begin  = (new Date(session.begin)).getTime()-startTime;
-		session.end    = (new Date(session.end  )).getTime()-startTime;
+		session.begin  = t2y(session.begin)-offsetTop;
+		session.end    = t2y(session.end  )-offsetTop;
 		session.left   = rooms[session.room]*width;
-		session.top    = zoomHeight*(session.begin);
-		session.height = zoomHeight*(session.end-session.begin)-1;
+		session.top    = session.begin;
+		session.height = session.end-session.begin-1;
 		session.width  = width-10;
 		session.active = (session.video != undefined);
 
@@ -227,7 +227,7 @@ function generateIndex(videos, sessions, cb) {
 	var days = [];
 	for (var i = 0; i < 4; i++) {
 		days.push({
-			top: zoomHeight*((new Date('2015-12-'+(27+i)+'T06:00:00.000Z')).getTime() - startTime),
+			top: t2y('2015-12-'+(27+i)+'T09:00:00.000Z') - offsetTop,
 			width: width*Object.keys(rooms).length,
 			text: 'Day '+(i+1)
 		})
@@ -237,6 +237,15 @@ function generateIndex(videos, sessions, cb) {
 	var html = mustache.render(indexTemplate, data);
 	fs.writeFileSync(path.resolve(config.mainFolder, config.webFolder)+'/index.html', html, 'utf8');
 	cb();
+
+	function t2y(time) {
+		time = new Date(time);
+		var y = time.getTime()/1000;
+		y -= Math.floor((y-3600*4) / 86400)*3600*6;
+		y /= 60;
+		return y;
+
+	}
 }
 
 function ensureFolder(file) {
