@@ -40,7 +40,7 @@ function getSessions(cb) {
 function getVideos(cb) {
 	console.log('load video list');
 
-	network.getHTMLLinks('http://berlin.ftp.media.ccc.de/congress/32C3/h264-hd/', function (entries) {
+	network.getHTMLLinks('http://berlin.ftp.media.ccc.de/congress/32C3/h264-hd-web/', function (entries) {
 		var todos = [];
 
 		entries.forEach(function (entry) {
