@@ -17,3 +17,5 @@ web/*.html
 
 *.sh
 .DS_Store
+
+notes.txt
